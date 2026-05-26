@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Raspion | Administration Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Plus+Jakarta+Sans:wght@300;400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <!-- Background Orbs -->
+  <div class="glow-orb orb-1"></div>
+  <div class="glow-orb orb-3"></div>
+
+  <!-- Header -->
+  <header>
+    <div class="nav-container">
+      <a href="/" class="logo-container">
+        <!-- Render custom SVG logo directly -->
+        <img src="/raspionsvg.svg" alt="Raspion Logo" class="logo-image">
+      </a>
+      <nav>
+        <a href="/" class="nav-link">&larr; Back to Public Portal</a>
+        <!-- Theme Toggle Button -->
+        <button id="theme-toggle" class="theme-toggle-btn" title="Toggle Theme">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+            <path id="moon-path" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"></path>
+            <path id="sun-path" class="hidden" d="M12 3v2.25m0 13.5V21M3 12h2.25m13.5 0H21M5.757 5.757l1.591 1.591m8.802 8.802l1.591 1.591M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </button>
+        <button id="logout-btn" class="btn-secondary btn-sm hidden">Sign Out</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- AUTHENTICATION VIEW -->
+  <div class="admin-auth-wrapper card-panel" id="auth-panel">
+    <div class="corner-accents">
+      <div class="corner top-left"></div>
+      <div class="corner top-right"></div>
+      <div class="corner bottom-left"></div>
+      <div class="corner bottom-right"></div>
+    </div>
+    <div class="contact-header" style="margin-bottom: 2rem;">
+      <h2 style="font-size: 1.8rem;">Clinic Login</h2>
+      <p style="font-size: 0.85rem; margin-top: 0.5rem;">Access the check-in queue and upload practice media.</p>
+    </div>
+    <form id="login-form">
+      <div class="form-group">
+        <label>Admin Email</label>
+        <input type="email" id="login-email" placeholder="raspionadmin@gmail.com" required>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="login-password" placeholder="••••••••" required>
+      </div>
+      <button type="submit" class="btn-primary" style="width:100%; margin-top: 1rem;">Authenticate</button>
+      <div class="helper-text" style="margin-top:1.2rem; text-align:center; font-size:0.75rem;">
+        Testing: sign in with the configured email <strong>raspionadmin@gmail.com</strong>
+      </div>
+      <div id="auth-error" class="hidden" style="color:var(--color-neon-red); text-align:center; font-family:var(--font-mono); font-size:0.8rem; margin-top: 1rem;">
+      </div>
+    </form>
+  </div>
+
+  <!-- ADMIN DASHBOARD PANEL (HIDDEN BY DEFAULT) -->
+  <div class="admin-container hidden" id="dashboard-panel">
+    <div class="admin-header-row">
+      <div>
+        <h2 style="font-size: 2.2rem;">Practice Control</h2>
+        <p>Overview of active clinic queues and practice public gallery uploads.</p>
+      </div>
+      <div class="admin-nav">
+        <button class="btn-primary" id="add-patient-dummy-btn">Add Walk-In Demo</button>
+      </div>
+    </div>
+
+    <div class="admin-body-grid">
+      <!-- Left: Reception Patient Board -->
+      <div class="card-panel admin-queue-card">
+        <div class="corner-accents">
+          <div class="corner top-left"></div>
+          <div class="corner top-right"></div>
+          <div class="corner bottom-left"></div>
+          <div class="corner bottom-right"></div>
+        </div>
+        <h3 style="font-size: 1.4rem; margin-bottom: 1.5rem;">Active Reception Queue</h3>
+        
+        <!-- Inline quick patient adder -->
+        <form id="inline-patient-form" class="patient-add-inline-form">
+          <input type="text" id="inline-name" placeholder="Patient Name" required>
+          <input type="tel" id="inline-phone" placeholder="Phone" required>
+          <select id="inline-purpose" required>
+            <option value="" disabled selected>Purpose...</option>
+            <option value="Consultation">Consultation</option>
+            <option value="Follow-up">Follow-up</option>
+            <option value="Therapy">Therapy</option>
+          </select>
+          <button type="submit" class="btn-primary">Add</button>
+        </form>
+
+        <div class="admin-table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Patient</th>
+                <th>Source</th>
+                <th>Purpose</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-queue-tbody">
+              <!-- Dynamically populated -->
+              <tr>
+                <td colspan="5" style="text-align: center; color: var(--text-muted); font-style: italic;">
+                  No patients in queue. Add one to start.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Right: Media Gallery Uploader -->
+      <div class="card-panel uploader-card">
+        <div class="corner-accents">
+          <div class="corner top-left"></div>
+          <div class="corner top-right"></div>
+          <div class="corner bottom-left"></div>
+          <div class="corner bottom-right"></div>
+        </div>
+        <h3 style="font-size: 1.4rem; margin-bottom: 1.5rem;">Media Portal</h3>
+        <p style="font-size: 0.85rem; margin-bottom: 1.5rem;">Upload images/videos to display on the public gallery. Limits to the latest 3-4 files.</p>
+        
+        <div class="drag-drop-zone" id="drop-zone">
+          <div class="upload-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
+            </svg>
+          </div>
+          <span>Drag and drop image or video here, or <strong style="color:var(--color-gold)">click to browse</strong></span>
+          <input type="file" id="media-file-input" class="hidden-input" accept="image/*,video/*">
+        </div>
+
+        <div class="form-group">
+          <label>Caption / Title</label>
+          <input type="text" id="media-caption" placeholder="Reception Screen Mockup">
+        </div>
+
+        <div class="upload-progress-container hidden" id="progress-container">
+          <div class="upload-progress-bar">
+            <div class="progress-fill" id="progress-bar-fill"></div>
+          </div>
+          <div class="upload-status-text" id="upload-status-lbl">Uploading file...</div>
+        </div>
+      </div>
+
+      <!-- Bottom: Media List -->
+      <div class="card-panel admin-media-card">
+        <div class="corner-accents">
+          <div class="corner top-left"></div>
+          <div class="corner top-right"></div>
+          <div class="corner bottom-left"></div>
+          <div class="corner bottom-right"></div>
+        </div>
+        <h3 style="font-size: 1.4rem;">Uploaded Media Files</h3>
+        <div class="admin-media-grid" id="admin-media-list">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- App Javascript -->
+  <script src="/js/supabase-client.js?v=4"></script>
+  <script src="/js/admin.js?v=4"></script>
+  <!-- Initialize theme in script before load to prevent flash -->
+  <script>
+    try {
+      const themeToggleBtn = document.getElementById('theme-toggle');
+      const moonPath = document.getElementById('moon-path');
+      const sunPath = document.getElementById('sun-path');
+      
+      if (themeToggleBtn) {
+        // Check local storage or preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+          document.body.classList.add('dark-mode');
+          if (moonPath) moonPath.classList.add('hidden');
+          if (sunPath) sunPath.classList.remove('hidden');
+        }
+        
+        themeToggleBtn.addEventListener('click', () => {
+          document.body.classList.toggle('dark-mode');
+          const isDark = document.body.classList.contains('dark-mode');
+          localStorage.setItem('theme', isDark ? 'dark' : 'light');
+          
+          if (isDark) {
+            if (moonPath) moonPath.classList.add('hidden');
+            if (sunPath) sunPath.classList.remove('hidden');
+          } else {
+            if (sunPath) sunPath.classList.add('hidden');
+            if (moonPath) moonPath.classList.remove('hidden');
+          }
+        });
+      }
+    } catch (e) {
+      console.warn('LocalStorage theme preferences blocked.', e);
+    }
+  </script>
+</body>
+</html>
