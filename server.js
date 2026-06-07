@@ -57,8 +57,23 @@ app.post('/api/submit-inquiry', async (req, res) => {
     return res.status(400).json({ success: false, error: 'All fields are required.' });
   }
 
-  const resendApiKey = process.env.RESEND_API_KEY;
-  const toEmail = process.env.NOTIFICATION_EMAIL || 'raspionai@gmail.com';
+  let resendApiKey = process.env.RESEND_API_KEY;
+  let toEmail = process.env.NOTIFICATION_EMAIL;
+
+  if (!resendApiKey) {
+    try {
+      // Reload dotenv in case the file was modified while the server was running
+      require('dotenv').config();
+      resendApiKey = process.env.RESEND_API_KEY;
+      toEmail = process.env.NOTIFICATION_EMAIL;
+    } catch (e) {
+      console.error('Failed to hot-reload dotenv:', e);
+    }
+  }
+
+  if (!toEmail) {
+    toEmail = 'raspionai@gmail.com';
+  }
 
   if (!resendApiKey) {
     console.error('[ERROR] Resend API Key is missing in environment configuration.');
