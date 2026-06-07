@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   
   // Initialize dynamic components
   initIntakeForm(supabase);
+  initContactForm();
   initCheckmarkSimulator();
   initVoiceAiSimulator();
   initChatSimulator();
@@ -398,6 +399,74 @@ function initIntakeForm(supabase) {
     form.reset();
     successDiv.classList.add('hidden');
     form.classList.remove('hidden');
+  });
+}
+
+function initContactForm() {
+  const form = document.getElementById('contact-form');
+  const successDiv = document.getElementById('contact-success');
+  
+  if (!form) return;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById('contact-name').value;
+    const clinicName = document.getElementById('contact-clinic').value;
+    const email = document.getElementById('contact-email').value;
+    const phone = document.getElementById('contact-phone').value;
+    const message = document.getElementById('contact-message').value;
+
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn ? submitBtn.textContent : 'Submit Inquiry';
+
+    // Disable form controls
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+    }
+
+    try {
+      const response = await fetch('/api/submit-inquiry', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, clinicName, email, phone, message })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to submit inquiry.');
+      }
+
+      // Success
+      if (successDiv) {
+        successDiv.classList.remove('hidden');
+        successDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+      
+      // Reset form fields
+      form.reset();
+      
+      // Keep success message visible for 7 seconds, then hide it
+      setTimeout(() => {
+        if (successDiv) {
+          successDiv.classList.add('hidden');
+        }
+      }, 7000);
+
+    } catch (err) {
+      console.error('[ERROR] Form submission failed:', err);
+      alert('Error: ' + err.message);
+    } finally {
+      // Re-enable submit button
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
+      }
+    }
   });
 }
 

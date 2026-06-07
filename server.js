@@ -49,6 +49,73 @@ app.post('/api/trigger-checkmark', async (req, res) => {
   }, 1000);
 });
 
+// POST Endpoint to handle Workspace upgrade / Contact inquiries and route them via Resend
+app.post('/api/submit-inquiry', async (req, res) => {
+  const { name, clinicName, email, phone, message } = req.body;
+
+  if (!name || !clinicName || !email || !phone || !message) {
+    return res.status(400).json({ success: false, error: 'All fields are required.' });
+  }
+
+  const resendApiKey = process.env.RESEND_API_KEY;
+  const toEmail = process.env.NOTIFICATION_EMAIL || 'raspionai@gmail.com';
+
+  if (!resendApiKey) {
+    console.error('[ERROR] Resend API Key is missing in environment configuration.');
+    return res.status(500).json({ success: false, error: 'Email delivery is not configured on the server.' });
+  }
+
+  try {
+    console.log(`[INQUIRY] Received inquiry from ${name} (${clinicName})`);
+    
+    const emailBody = {
+      from: 'Raspion <onboarding@resend.dev>',
+      to: toEmail,
+      subject: `New Raspion Clinic Inquiry - ${clinicName}`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px; background-color: #ffffff; color: #1e293b;">
+          <h2 style="color: #0f172a; border-bottom: 2px solid #c2902c; padding-bottom: 10px; margin-top: 0;">New Consultation Inquiry</h2>
+          <p style="margin: 15px 0;"><strong>Name:</strong> ${name}</p>
+          <p style="margin: 15px 0;"><strong>Workspace / Clinic Name:</strong> ${clinicName}</p>
+          <p style="margin: 15px 0;"><strong>Email Address:</strong> <a href="mailto:${email}" style="color: #3b82f6;">${email}</a></p>
+          <p style="margin: 15px 0;"><strong>Contact Phone:</strong> ${phone}</p>
+          
+          <div style="margin-top: 20px; padding: 15px; background-color: #f8fafc; border-left: 4px solid #c2902c; border-radius: 4px;">
+            <h4 style="margin: 0 0 10px 0; color: #0f172a;">Automation Intent:</h4>
+            <p style="margin: 0; white-space: pre-wrap; line-height: 1.6; color: #334155;">${message}</p>
+          </div>
+          
+          <p style="font-size: 0.85rem; color: #64748b; margin-top: 30px; border-top: 1px solid #e2e8f0; padding-top: 15px; text-align: center;">
+            This email was sent automatically from your Raspion Clinic Automation platform.
+          </p>
+        </div>
+      `
+    };
+
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${resendApiKey}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(emailBody)
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error('[ERROR] Resend API response error:', data);
+      throw new Error(data.message || 'Failed to send email via Resend.');
+    }
+
+    console.log('[SUCCESS] Email sent successfully via Resend:', data);
+    res.json({ success: true, data });
+  } catch (error) {
+    console.error('[ERROR] Failed to send email inquiry:', error);
+    res.status(500).json({ success: false, error: error.message || 'Failed to send inquiry.' });
+  }
+});
+
 // Serve public/admin.html for admin route
 app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'admin.html'));
