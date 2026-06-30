@@ -25,26 +25,34 @@
       <a href="#" class="logo-container">
         <img src="/raspionsvg.svg" alt="Raspion Logo" class="logo-image">
       </a>
-      <nav style="display: flex; align-items: center; gap: 1.5rem;">
+      <!-- Hamburger Menu Button -->
+      <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle Menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+      <nav>
         <a href="#features" class="nav-link">Features</a>
         <a href="#simulators" class="nav-link">Simulators</a>
         <a href="#why-raspion" class="nav-link">Why Choose Us</a>
         <a href="#gallery" class="nav-link">Gallery</a>
-        <a href="https://www.linkedin.com/company/raspion/posts/?feedView=all" target="_blank" rel="noopener" class="nav-icon-link" title="LinkedIn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon-svg" style="width: 18px; height: 18px; display: block;"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
-        </a>
-        <a href="https://www.instagram.com/raspionai/" target="_blank" rel="noopener" class="nav-icon-link" title="Instagram">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon-svg" style="width: 18px; height: 18px; display: block;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-        </a>
-        <!-- Theme Toggle Button -->
-        <button id="theme-toggle" class="theme-toggle-btn" title="Toggle Theme" style="margin-left: 0.5rem;">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
-            <!-- Moon Icon (Default / Light mode view) -->
-            <path id="moon-path" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"></path>
-            <!-- Sun Icon (Hidden by default, switched in JS) -->
-            <path id="sun-path" class="hidden" d="M12 3v2.25m0 13.5V21M3 12h2.25m13.5 0H21M5.757 5.757l1.591 1.591m8.802 8.802l1.591 1.591M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-          </svg>
-        </button>
+        <div class="nav-socials-row">
+          <a href="https://www.linkedin.com/company/raspion/posts/?feedView=all" target="_blank" rel="noopener" class="nav-icon-link" title="LinkedIn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon-svg" style="width: 18px; height: 18px; display: block;"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+          </a>
+          <a href="https://www.instagram.com/raspionai/" target="_blank" rel="noopener" class="nav-icon-link" title="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon-svg" style="width: 18px; height: 18px; display: block;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+          </a>
+          <!-- Theme Toggle Button -->
+          <button id="theme-toggle" class="theme-toggle-btn" title="Toggle Theme" style="margin-left: 0.5rem;">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+              <!-- Moon Icon (Default / Light mode view) -->
+              <path id="moon-path" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"></path>
+              <!-- Sun Icon (Hidden by default, switched in JS) -->
+              <path id="sun-path" class="hidden" d="M12 3v2.25m0 13.5V21M3 12h2.25m13.5 0H21M5.757 5.757l1.591 1.591m8.802 8.802l1.591 1.591M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </button>
+        </div>
       </nav>
     </div>
   </header>

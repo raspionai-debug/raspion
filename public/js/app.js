@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   initScrollReveal();
   initMouseParallax();
   initHowItWorksScrollAnimation();
+  initMobileMenu();
 });
 
 // Scroll to simulator helper
@@ -1223,4 +1224,36 @@ function initHowItWorksScrollAnimation() {
     // Step 2 fades out, Step 3 fades in
     .to("#step-text-2", { opacity: 0, y: -30, ease: "power1.inOut" })
     .fromTo("#step-text-3", { opacity: 0, y: 30 }, { opacity: 1, y: 0, ease: "power1.inOut" });
+}
+
+// ==========================================
+// MOBILE MENU TOGGLE LOGIC
+// ==========================================
+function initMobileMenu() {
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  const navMenu = document.querySelector('nav');
+  
+  if (menuBtn && navMenu) {
+    menuBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      menuBtn.classList.toggle('active');
+      navMenu.classList.toggle('active');
+    });
+    
+    // Close menu when clicking outside of it
+    document.addEventListener('click', (e) => {
+      if (!navMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+        menuBtn.classList.remove('active');
+        navMenu.classList.remove('active');
+      }
+    });
+    
+    // Close menu when clicking a link
+    navMenu.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        menuBtn.classList.remove('active');
+        navMenu.classList.remove('active');
+      });
+    });
+  }
 }
