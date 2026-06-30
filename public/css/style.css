@@ -1908,7 +1908,7 @@ footer a:hover {
   margin: 1.5rem 0 0 0;
   text-align: left;
 }
-.compliance-list li, .pricing-points-list li {
+.pricing-points-list li {
   font-size: 1.05rem !important;
   color: var(--text-muted);
   margin-bottom: 1.5rem !important;
@@ -1916,7 +1916,7 @@ footer a:hover {
   padding-left: 2rem !important;
   line-height: 1.6 !important;
 }
-.compliance-list li::before, .pricing-points-list li::before {
+.pricing-points-list li::before {
   content: "•";
   color: var(--color-gold);
   font-weight: bold;
@@ -1924,6 +1924,14 @@ footer a:hover {
   position: absolute;
   left: 0.25rem;
   top: -4px;
+}
+.compliance-list li {
+  font-size: 1.05rem !important;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem !important;
+  line-height: 1.6 !important;
+  list-style-type: none;
+  padding-left: 0.25rem !important;
 }
 .compliance-list li strong, .pricing-points-list li strong {
   color: var(--text-white);
