@@ -25,12 +25,18 @@
       <a href="#" class="logo-container">
         <img src="/raspionsvg.svg" alt="Raspion Logo" class="logo-image">
       </a>
-      <nav>
+      <nav style="display: flex; align-items: center; gap: 1.5rem;">
         <a href="#features" class="nav-link">Features</a>
         <a href="#simulators" class="nav-link">Simulators</a>
         <a href="#gallery" class="nav-link">Gallery</a>
+        <a href="https://www.linkedin.com/company/raspion/posts/?feedView=all" target="_blank" rel="noopener" class="nav-icon-link" title="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon-svg" style="width: 18px; height: 18px; display: block;"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+        </a>
+        <a href="https://www.instagram.com/raspionai/" target="_blank" rel="noopener" class="nav-icon-link" title="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon-svg" style="width: 18px; height: 18px; display: block;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+        </a>
         <!-- Theme Toggle Button -->
-        <button id="theme-toggle" class="theme-toggle-btn" title="Toggle Theme">
+        <button id="theme-toggle" class="theme-toggle-btn" title="Toggle Theme" style="margin-left: 0.5rem;">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
             <!-- Moon Icon (Default / Light mode view) -->
             <path id="moon-path" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"></path>
@@ -76,14 +82,14 @@
   <!-- Features Grid -->
   <section id="features" class="features-section">
     <div class="container">
-      <div class="section-header">
-        <h2>Autonomous Operations Ecosystem</h2>
+      <div class="section-header reveal">
+        <h2>System Autopilots Overview</h2>
         <div class="divider"></div>
         <p>A suite of high-fidelity, autonomous tools crafted to eliminate manual back-office tasks.</p>
       </div>
       <div class="features-grid">
         <!-- Feature 1 -->
-        <div class="feature-card" onclick="scrollToSim('checkmark-sim-anchor')">
+        <div class="feature-card reveal" onclick="scrollToSim('checkmark-sim-anchor')">
           <div class="feature-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -94,7 +100,7 @@
           <span class="learn-more">Try Simulator &rarr;</span>
         </div>
         <!-- Feature 2 -->
-        <div class="feature-card" onclick="scrollToSim('voice-sim-anchor')">
+        <div class="feature-card reveal" onclick="scrollToSim('voice-sim-anchor')">
           <div class="feature-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z" />
@@ -105,7 +111,7 @@
           <span class="learn-more">Try Simulator &rarr;</span>
         </div>
         <!-- Feature 3 -->
-        <div class="feature-card" onclick="scrollToSim('sms-sim-anchor')">
+        <div class="feature-card reveal" onclick="scrollToSim('sms-sim-anchor')">
           <div class="feature-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
@@ -122,14 +128,14 @@
   <!-- Interactive Simulators Section -->
   <section id="simulators" class="simulators-section">
     <div class="container">
-      <div class="section-header">
+      <div class="section-header reveal">
         <h2>Interactive System Simulators</h2>
         <div class="divider"></div>
         <p>Observe how our systems coordinate in real-time, using a clinic environment as a live case study.</p>
       </div>
 
       <!-- SIM 1: CHECKMARK SYSTEM (Overhauled 4-Column Grid) -->
-      <div id="checkmark-sim-anchor" class="sim-container card-panel">
+      <div id="checkmark-sim-anchor" class="sim-container card-panel reveal">
         <div class="sim-header">
           <span class="sim-badge">FEATURE 1 CASE STUDY</span>
           <h3>The Checkmark Notification Flow</h3>
@@ -247,7 +253,7 @@
       </div>
 
       <!-- SIM 2: VOICE AI AUTOPILOT -->
-      <div id="voice-sim-anchor" class="sim-container card-panel">
+      <div id="voice-sim-anchor" class="sim-container card-panel reveal">
         <div class="sim-header">
           <span class="sim-badge">FEATURE 2 DEMO</span>
           <h3>Autonomous Voice AI Autopilot</h3>
@@ -286,7 +292,7 @@
       </div>
 
       <!-- SIM 3: SMS/WHATSAPP BOOKING -->
-      <div id="sms-sim-anchor" class="sim-container card-panel">
+      <div id="sms-sim-anchor" class="sim-container card-panel reveal">
         <div class="sim-header">
           <span class="sim-badge">FEATURE 3 DEMO</span>
           <h3>SMS & WhatsApp Scheduling</h3>
@@ -361,7 +367,7 @@
   <!-- Media Showcase Gallery -->
   <section id="gallery" class="gallery-section">
     <div class="container">
-      <div class="section-header">
+      <div class="section-header reveal">
         <h2>Practice Operations Gallery</h2>
         <div class="divider"></div>
         <p>Observe Raspion Autopilot in action. Real videos and media uploaded directly by clinic administrators.</p>
@@ -381,12 +387,12 @@
         <div class="corner bottom-left"></div>
         <div class="corner bottom-right"></div>
       </div>
-      <div class="contact-header">
+      <div class="contact-header reveal">
         <h2>Upgrade Your Workspaces</h2>
         <div class="divider"></div>
         <p>Schedule a consulting call to see how Raspion fits into your clinic's existing workspace.</p>
       </div>
-      <form id="contact-form">
+      <form id="contact-form" class="reveal">
         <div class="form-row">
           <div class="form-group">
             <label>Your Name</label>

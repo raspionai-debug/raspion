@@ -17,6 +17,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   initVoiceAiSimulator();
   initChatSimulator();
   loadGallery(supabase);
+  
+  // Cinematic Visual Adjustments
+  initScrollReveal();
+  initMouseParallax();
 });
 
 // Scroll to simulator helper
@@ -964,7 +968,7 @@ async function loadGallery(supabase) {
   grid.innerHTML = '';
   mediaItems.forEach(item => {
     const card = document.createElement('div');
-    card.className = 'media-card';
+    card.className = 'media-card reveal';
     
     let mediaHTML = '';
     const ytId = getYouTubeId(item.url);
@@ -985,6 +989,11 @@ async function loadGallery(supabase) {
     `;
     grid.appendChild(card);
   });
+  
+  // Connect dynamically generated cards to scroll-reveal observer
+  if (window.scrollRevealObserver && grid) {
+    grid.querySelectorAll('.reveal').forEach(el => window.scrollRevealObserver.observe(el));
+  }
 }
 
 // ==========================================
@@ -1082,4 +1091,60 @@ function playCallConnectedSound() {
     osc.start();
     osc.stop(ctx.currentTime + 0.3);
   } catch (e) {}
+}
+
+// ==========================================
+// CINEMATIC SCROLL REVEAL (Intersection Observer API)
+// ==========================================
+function initScrollReveal() {
+  const reveals = document.querySelectorAll('.reveal');
+  if (reveals.length === 0) return;
+  
+  window.scrollRevealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+        window.scrollRevealObserver.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.05,
+    rootMargin: '0px 0px -60px 0px'
+  });
+  
+  reveals.forEach(el => window.scrollRevealObserver.observe(el));
+}
+
+// ==========================================
+// CINEMATIC MOUSE MOVE PARALLAX & TILT
+// ==========================================
+function initMouseParallax() {
+  // Check user preference for motion settings
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  
+  document.addEventListener('mousemove', (e) => {
+    const x = (e.clientX - window.innerWidth / 2) * 0.035;
+    const y = (e.clientY - window.innerHeight / 2) * 0.035;
+    
+    // 1. Move background decorative orbs
+    const orbs = document.querySelectorAll('.glow-orb');
+    orbs.forEach((orb, index) => {
+      const depth = (index + 1) * 0.45;
+      orb.style.transform = `translate(${x * depth}px, ${y * depth}px)`;
+    });
+    
+    // 2. 3D tilt floating hero card (glass canvas)
+    const animContainer = document.querySelector('.hero-animation-container');
+    if (animContainer) {
+      animContainer.style.transform = `translate(${x * 0.4}px, ${y * 0.4}px) rotateX(${-y * 0.12}deg) rotateY(${x * 0.12}deg)`;
+      animContainer.style.transition = 'none'; // smooth tracking
+    }
+    
+    // 3. Move hero headers slightly opposite for parallax depth (depth element)
+    const heroContent = document.querySelector('.hero-content');
+    if (heroContent) {
+      heroContent.style.transform = `translate(${-x * 0.25}px, ${-y * 0.25}px)`;
+      heroContent.style.transition = 'none';
+    }
+  });
 }

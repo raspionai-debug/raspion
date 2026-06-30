@@ -334,6 +334,7 @@ nav {
   position: relative;
   background-image: radial-gradient(var(--glass-border) 1px, transparent 0);
   background-size: 40px 40px;
+  perspective: 1200px;
 }
 .hero-grid {
   display: grid;
@@ -1726,4 +1727,43 @@ footer a:hover {
 
 .hidden {
   display: none !important;
+}
+
+/* Nav Social Icon Links */
+.nav-icon-link {
+  color: var(--text-muted) !important;
+  transition: var(--transition-smooth);
+  display: flex;
+  align-items: center;
+  padding: 0.3rem;
+}
+.nav-icon-link:hover {
+  color: var(--color-gold) !important;
+  transform: translateY(-2px);
+}
+.nav-icon-svg {
+  stroke: currentColor;
+  fill: none;
+  transition: stroke 0.3s ease;
+}
+
+/* Scroll Reveal (Cinematic Animations) */
+.reveal {
+  opacity: 0;
+  transform: translateY(35px);
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
 }
