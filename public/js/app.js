@@ -1161,6 +1161,13 @@ function initHowItWorksScrollAnimation() {
   // Avoid running animation if user prefers reduced motion
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
+  const isMobile = window.innerWidth <= 768;
+  const yVal1 = isMobile ? 120 : 180;
+  const yVal2 = isMobile ? 220 : 320;
+  const yVal3 = isMobile ? 280 : 400;
+  const xVal1 = isMobile ? -30 : -45;
+  const xVal2 = isMobile ? 25 : 35;
+
   // Timeline for animating the floating capsule's path, scale, and rotation
   const capsuleTl = gsap.timeline({
     scrollTrigger: {
@@ -1176,23 +1183,23 @@ function initHowItWorksScrollAnimation() {
   capsuleTl
     // Step 1 to Step 2 transition (down and left along S-curve)
     .to("#scroll-capsule", {
-      y: 180,
-      x: -45,
+      y: yVal1,
+      x: xVal1,
       rotation: 40,
-      scale: 1.25,
+      scale: isMobile ? 1.1 : 1.25,
       ease: "power1.inOut"
     })
     // Step 2 to Step 3 transition (down and right along S-curve)
     .to("#scroll-capsule", {
-      y: 320,
-      x: 35,
+      y: yVal2,
+      x: xVal2,
       rotation: -30,
-      scale: 0.9,
+      scale: isMobile ? 0.95 : 0.9,
       ease: "power1.inOut"
     })
     // Final settling at the bottom of the curve
     .to("#scroll-capsule", {
-      y: 400,
+      y: yVal3,
       x: 0,
       rotation: 0,
       scale: 1.0,

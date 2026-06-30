@@ -1310,7 +1310,7 @@ body.dark-mode .s-badge.purple {
 }
 .gallery-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr));
   gap: 2.5rem;
 }
 .gallery-placeholder {
@@ -1687,8 +1687,17 @@ footer a:hover {
     flex-direction: column;
     gap: 2rem;
   }
+  .nav-container {
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 1.25rem 1rem;
+    text-align: center;
+  }
   nav {
-    display: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.25rem;
   }
 }
 
@@ -1776,7 +1785,7 @@ footer a:hover {
 }
 .industry-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
   gap: 2.5rem;
   margin-top: 3.5rem;
 }
@@ -1828,7 +1837,7 @@ footer a:hover {
 }
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
   gap: 3.5rem;
   text-align: center;
 }
@@ -2060,7 +2069,7 @@ footer a:hover {
     gap: 2rem;
   }
   .path-visual-box {
-    height: 200px;
+    height: 300px;
   }
   .scroll-text-col {
     height: 200px;
