@@ -738,6 +738,8 @@ function initMediaUploader() {
     });
   }
   
+  let selectedFile = null;
+  
   dropZone.addEventListener('click', () => fileInput.click());
   
   dropZone.addEventListener('dragover', (e) => {
@@ -754,26 +756,51 @@ function initMediaUploader() {
     dropZone.style.borderColor = 'var(--glass-border)';
     const files = e.dataTransfer.files;
     if (files.length > 0) {
-      handleUpload(files[0]);
+      selectedFile = files[0];
+      if (urlInput) urlInput.value = ''; // clear url input since file is selected
+      const label = dropZone.querySelector('span');
+      if (label) {
+        label.innerHTML = `Selected file: <strong style="color:var(--color-gold)">${selectedFile.name}</strong> (click to change)`;
+      }
     }
   });
   
   fileInput.addEventListener('change', () => {
     if (fileInput.files.length > 0) {
-      handleUpload(fileInput.files[0]);
+      selectedFile = fileInput.files[0];
+      if (urlInput) urlInput.value = ''; // clear url input
+      const label = dropZone.querySelector('span');
+      if (label) {
+        label.innerHTML = `Selected file: <strong style="color:var(--color-gold)">${selectedFile.name}</strong> (click to change)`;
+      }
     }
   });
 
   if (addLinkBtn) {
     addLinkBtn.addEventListener('click', async () => {
-      const url = urlInput.value.trim();
-      const title = captionInput.value.trim() || 'Link Media';
+      const url = urlInput ? urlInput.value.trim() : '';
+      const title = captionInput.value.trim();
       
-      if (!url) {
-        alert('Please enter a YouTube URL or direct image/video link.');
+      if (!selectedFile && !url) {
+        alert('Please select a file or enter a YouTube URL / direct link.');
         return;
       }
       
+      if (selectedFile) {
+        // Upload the selected file with the provided caption
+        const uploadTitle = title || selectedFile.name;
+        await handleUpload(selectedFile, uploadTitle);
+        
+        // Reset file selection state
+        selectedFile = null;
+        const label = dropZone.querySelector('span');
+        if (label) {
+          label.innerHTML = `Drag and drop image or video here, or <strong style="color:var(--color-gold)">click to browse</strong>`;
+        }
+        return;
+      }
+      
+      // Handle URL link
       const ytId = getYouTubeId(url);
       const isVideo = url.match(/\.(mp4|webm|ogg|mov)$/i);
       const type = ytId ? 'youtube' : (isVideo ? 'video' : 'image');
@@ -786,7 +813,7 @@ function initMediaUploader() {
         id: generateUUID(),
         url: url,
         type: type,
-        title: title,
+        title: title || 'Link Media',
         created_at: new Date().toISOString()
       };
       
@@ -798,7 +825,7 @@ function initMediaUploader() {
         progressFill.style.width = '100%';
         progressLabel.textContent = 'Media link added successfully!';
         
-        urlInput.value = '';
+        if (urlInput) urlInput.value = '';
         captionInput.value = '';
         
         setTimeout(() => {
@@ -813,8 +840,8 @@ function initMediaUploader() {
     });
   }
   
-  async function handleUpload(file) {
-    const title = captionInput.value.trim() || file.name;
+  async function handleUpload(file, customTitle) {
+    const title = customTitle || captionInput.value.trim() || file.name;
     const type = file.type.startsWith('video') ? 'video' : 'image';
     
     progressContainer.classList.remove('hidden');
