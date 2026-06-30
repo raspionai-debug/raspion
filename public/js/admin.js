@@ -658,9 +658,31 @@ function initQueueBoard() {
 // ==========================================
 // Media Portal & Uploader
 // ==========================================
+// Helper to extract YouTube video ID
+function getYouTubeId(url) {
+  if (!url) return null;
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
+  const match = url.match(regExp);
+  return (match && match[2].length === 11) ? match[2] : null;
+}
+
+// Helper to generate a valid UUID for Supabase compatibility
+function generateUUID() {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
+// ==========================================
 function initMediaUploader() {
   const dropZone = document.getElementById('drop-zone');
   const fileInput = document.getElementById('media-file-input');
+  const urlInput = document.getElementById('media-url-input');
+  const addLinkBtn = document.getElementById('add-link-btn');
   const captionInput = document.getElementById('media-caption');
   const progressContainer = document.getElementById('progress-container');
   const progressFill = document.getElementById('progress-bar-fill');
@@ -687,7 +709,15 @@ function initMediaUploader() {
       container.className = 'admin-media-item';
       
       let previewHTML = '';
-      if (item.type === 'video' || item.url.endsWith('.mp4') || item.url.includes('video') || item.url.startsWith('data:video/')) {
+      const ytId = getYouTubeId(item.url);
+      if (item.type === 'youtube' || ytId) {
+        const videoId = ytId || item.url;
+        previewHTML = `
+          <div class="admin-media-preview-container" style="position:relative; width:100%; height:120px; overflow:hidden; background:#000; border-radius:4px;">
+            <iframe src="https://www.youtube.com/embed/${videoId}?controls=1" frameborder="0" style="position:absolute; top:0; left:0; width:100%; height:100%; border:none; pointer-events:none;" allowfullscreen></iframe>
+          </div>
+        `;
+      } else if (item.type === 'video' || item.url.endsWith('.mp4') || item.url.includes('video') || item.url.startsWith('data:video/')) {
         previewHTML = `<video src="${item.url}" class="admin-media-preview" autoplay loop muted playsinline></video>`;
       } else {
         previewHTML = `<img src="${item.url}" class="admin-media-preview" alt="Preview">`;
@@ -733,6 +763,55 @@ function initMediaUploader() {
       handleUpload(fileInput.files[0]);
     }
   });
+
+  if (addLinkBtn) {
+    addLinkBtn.addEventListener('click', async () => {
+      const url = urlInput.value.trim();
+      const title = captionInput.value.trim() || 'Link Media';
+      
+      if (!url) {
+        alert('Please enter a YouTube URL or direct image/video link.');
+        return;
+      }
+      
+      const ytId = getYouTubeId(url);
+      const isVideo = url.match(/\.(mp4|webm|ogg|mov)$/i);
+      const type = ytId ? 'youtube' : (isVideo ? 'video' : 'image');
+      
+      progressContainer.classList.remove('hidden');
+      progressFill.style.width = '30%';
+      progressLabel.textContent = 'Saving media link...';
+      
+      const mediaItem = {
+        id: generateUUID(),
+        url: url,
+        type: type,
+        title: title,
+        created_at: new Date().toISOString()
+      };
+      
+      progressFill.style.width = '70%';
+      progressLabel.textContent = 'Registering link...';
+      
+      try {
+        await db.insertMedia(mediaItem);
+        progressFill.style.width = '100%';
+        progressLabel.textContent = 'Media link added successfully!';
+        
+        urlInput.value = '';
+        captionInput.value = '';
+        
+        setTimeout(() => {
+          progressContainer.classList.add('hidden');
+          refreshMedia();
+        }, 1000);
+      } catch (err) {
+        console.error('Failed to add media link:', err);
+        alert('Failed to add media link: ' + err.message);
+        progressContainer.classList.add('hidden');
+      }
+    });
+  }
   
   async function handleUpload(file) {
     const title = captionInput.value.trim() || file.name;
@@ -770,7 +849,7 @@ function initMediaUploader() {
           .getPublicUrl(filePath);
           
         const mediaItem = {
-          id: typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : 'media-' + Date.now(),
+          id: generateUUID(),
           url: publicUrl,
           type,
           title,
@@ -784,6 +863,7 @@ function initMediaUploader() {
         
         captionInput.value = '';
         fileInput.value = '';
+        if (urlInput) urlInput.value = '';
         
         setTimeout(() => {
           progressContainer.classList.add('hidden');
@@ -807,7 +887,7 @@ function initMediaUploader() {
       progressLabel.textContent = 'Saving locally...';
       
       const mediaItem = {
-        id: 'local-media-' + Date.now(),
+        id: generateUUID(),
         url: dataUrl,
         type,
         title,
@@ -820,7 +900,8 @@ function initMediaUploader() {
         progressLabel.textContent = 'Upload complete (saved locally)!';
       } catch (storageError) {
         console.warn('Local Storage quota exceeded. Storing in session memory...', storageError);
-        // Save in temporary in-memory list on window object so it displays during this session
+        alert('File upload failed: Local storage limit exceeded. Please upload a smaller image or paste a YouTube URL / direct link instead.');
+        
         if (!window.temp_media_items) window.temp_media_items = [];
         window.temp_media_items.unshift(mediaItem);
         progressFill.style.width = '100%';
@@ -829,6 +910,7 @@ function initMediaUploader() {
       
       captionInput.value = '';
       fileInput.value = '';
+      if (urlInput) urlInput.value = '';
       
       setTimeout(() => {
         progressContainer.classList.add('hidden');

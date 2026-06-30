@@ -883,6 +883,14 @@ function appendSheetRow(name, phone, source, purpose) {
   if (wrapper) wrapper.scrollTop = wrapper.scrollHeight;
 }
 
+// Helper to extract YouTube video ID
+function getYouTubeId(url) {
+  if (!url) return null;
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
+  const match = url.match(regExp);
+  return (match && match[2].length === 11) ? match[2] : null;
+}
+
 // ==========================================
 // MEDIA GALLERY: Load from Supabase (Video loop support)
 // ==========================================
@@ -959,8 +967,11 @@ async function loadGallery(supabase) {
     card.className = 'media-card';
     
     let mediaHTML = '';
-    // Autoplay loop muted playsinline to show video as replay only (gif style)
-    if (item.type === 'video' || item.url.endsWith('.mp4') || item.url.includes('video') || item.url.startsWith('data:video/')) {
+    const ytId = getYouTubeId(item.url);
+    if (item.type === 'youtube' || ytId) {
+      const videoId = ytId || item.url;
+      mediaHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=0&mute=0&controls=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%; height:100%; border:none; display:block;" class="gallery-video-preview"></iframe>`;
+    } else if (item.type === 'video' || item.url.endsWith('.mp4') || item.url.includes('video') || item.url.startsWith('data:video/')) {
       mediaHTML = `<video src="${item.url}" autoplay loop muted playsinline class="gallery-video-preview" style="width:100%; height:100%; object-fit:cover; display:block;"></video>`;
     } else {
       mediaHTML = `<img src="${item.url}" alt="${item.title || 'Practice Media'}">`;

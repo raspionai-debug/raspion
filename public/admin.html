@@ -147,12 +147,21 @@
           <input type="file" id="media-file-input" class="hidden-input" accept="image/*,video/*">
         </div>
 
+        <div style="text-align: center; margin: 1rem 0; color: var(--text-muted); font-size: 0.85rem; font-weight: 600;">— OR —</div>
+
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label>Or Paste YouTube URL / Direct Media Link</label>
+          <input type="url" id="media-url-input" placeholder="https://www.youtube.com/watch?v=... or direct video/image URL">
+        </div>
+
         <div class="form-group">
           <label>Caption / Title</label>
           <input type="text" id="media-caption" placeholder="Reception Screen Mockup">
         </div>
 
-        <div class="upload-progress-container hidden" id="progress-container">
+        <button type="button" id="add-link-btn" class="btn-primary" style="width: 100%; margin-top: 1rem; padding: 0.75rem;">Add Link Media</button>
+
+        <div class="upload-progress-container hidden" id="progress-container" style="margin-top: 1rem;">
           <div class="upload-progress-bar">
             <div class="progress-fill" id="progress-bar-fill"></div>
           </div>
