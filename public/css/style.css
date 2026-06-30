@@ -1936,3 +1936,126 @@ footer a:hover {
   }
 }
 
+/* How It Works Section */
+.how-it-works-section {
+  padding: 8rem 0 2rem 0;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--glass-border);
+}
+.scroll-container-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+.scroll-pin-container {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  align-items: center;
+  height: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  gap: 4rem;
+}
+.scroll-visual-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  position: relative;
+}
+.path-visual-box {
+  position: relative;
+  width: 200px;
+  height: 400px;
+}
+.scroll-path-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.scroll-moving-capsule {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, 0);
+  background: var(--glass-bg);
+  border: 1.5px solid var(--color-gold);
+  border-radius: 30px;
+  padding: 0.8rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: 0 10px 30px rgba(194, 144, 44, 0.15), inset 0 0 15px var(--glass-glow);
+  z-index: 5;
+  white-space: nowrap;
+  backdrop-filter: blur(8px);
+}
+.capsule-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--color-gold);
+}
+.capsule-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.capsule-label {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  color: var(--text-white);
+  text-transform: uppercase;
+}
+.scroll-text-col {
+  position: relative;
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.scroll-text-step {
+  position: absolute;
+  width: 100%;
+  text-align: left;
+}
+#step-text-2, #step-text-3 {
+  opacity: 0;
+}
+.step-num {
+  font-family: var(--font-mono);
+  color: var(--color-gold);
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+.scroll-text-step h3 {
+  font-size: 1.8rem;
+  color: var(--text-white);
+  margin-bottom: 1rem;
+  font-family: var(--font-serif);
+}
+.scroll-text-step p {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+@media (max-width: 768px) {
+  .scroll-pin-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .path-visual-box {
+    height: 200px;
+  }
+  .scroll-text-col {
+    height: 200px;
+  }
+}
+

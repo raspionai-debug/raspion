@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Cinematic Visual Adjustments
   initScrollReveal();
   initMouseParallax();
+  initHowItWorksScrollAnimation();
 });
 
 // Scroll to simulator helper
@@ -1147,4 +1148,72 @@ function initMouseParallax() {
       heroContent.style.transition = 'none';
     }
   });
+}
+
+// ==========================================
+// GSAP SCROLLTRIGGER PINNED HOW-IT-WORKS ANIMATION
+// ==========================================
+function initHowItWorksScrollAnimation() {
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+  
+  gsap.registerPlugin(ScrollTrigger);
+  
+  // Avoid running animation if user prefers reduced motion
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  // Timeline for animating the floating capsule's path, scale, and rotation
+  const capsuleTl = gsap.timeline({
+    scrollTrigger: {
+      trigger: "#scroll-section-trigger",
+      start: "top top",
+      end: "+=1500", // scroll progress length
+      pin: true,
+      scrub: true,
+      anticipatePin: 1
+    }
+  });
+
+  capsuleTl
+    // Step 1 to Step 2 transition (down and left along S-curve)
+    .to("#scroll-capsule", {
+      y: 180,
+      x: -45,
+      rotation: 40,
+      scale: 1.25,
+      ease: "power1.inOut"
+    })
+    // Step 2 to Step 3 transition (down and right along S-curve)
+    .to("#scroll-capsule", {
+      y: 320,
+      x: 35,
+      rotation: -30,
+      scale: 0.9,
+      ease: "power1.inOut"
+    })
+    // Final settling at the bottom of the curve
+    .to("#scroll-capsule", {
+      y: 400,
+      x: 0,
+      rotation: 0,
+      scale: 1.0,
+      ease: "power1.out"
+    });
+
+  // Timeline for step text fading in and out synchronously
+  const textTl = gsap.timeline({
+    scrollTrigger: {
+      trigger: "#scroll-section-trigger",
+      start: "top top",
+      end: "+=1500",
+      scrub: true
+    }
+  });
+
+  textTl
+    // Step 1 fades out, Step 2 fades in
+    .to("#step-text-1", { opacity: 0, y: -30, ease: "power1.inOut" })
+    .fromTo("#step-text-2", { opacity: 0, y: 30 }, { opacity: 1, y: 0, ease: "power1.inOut" })
+    // Step 2 fades out, Step 3 fades in
+    .to("#step-text-2", { opacity: 0, y: -30, ease: "power1.inOut" })
+    .fromTo("#step-text-3", { opacity: 0, y: 30 }, { opacity: 1, y: 0, ease: "power1.inOut" });
 }
