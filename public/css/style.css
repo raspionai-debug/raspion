@@ -2214,18 +2214,20 @@ footer a:hover {
   display: flex;
   align-items: center;
 }
+/* Cases Card Padding and Spacing overrides */
 .cases-card {
   width: 100%;
+  padding: 3.5rem 3.5rem 4rem 3.5rem !important;
 }
 .case-studies-list {
   display: flex;
   flex-direction: column;
-  gap: 1.75rem;
-  margin-top: 1.75rem;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
 }
 .case-study-item {
   border-bottom: 1px dashed var(--glass-border);
-  padding-bottom: 1.5rem;
+  padding-bottom: 1.25rem;
 }
 .case-study-item:last-child {
   border-bottom: none;
