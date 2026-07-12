@@ -2138,59 +2138,75 @@ footer a:hover {
 
 /* Journey & Case Studies Section styling */
 .journey-section {
-  padding: 8rem 0;
+  padding: 10rem 0;
   background: var(--bg-secondary);
   border-bottom: 1.5px solid var(--glass-border);
   transition: var(--transition-theme);
 }
+.journey-section .container {
+  max-width: 1400px;
+  width: 92%;
+}
+.journey-section .grid-2-col {
+  gap: 5.5rem;
+  align-items: center;
+}
+.journey-content {
+  padding-right: 2rem;
+}
 .journey-content h2 {
-  font-size: 2.6rem;
+  font-size: 2.8rem;
   line-height: 1.25;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.75rem;
   font-family: var(--font-serif);
 }
 .journey-lead {
   font-size: 1.15rem;
   color: var(--text-muted);
-  margin-bottom: 2rem;
-  line-height: 1.6;
+  margin-bottom: 2.5rem;
+  line-height: 1.7;
 }
 .past-niches {
   display: flex;
   flex-direction: column;
-  gap: 1.75rem;
-  margin-bottom: 2.5rem;
+  gap: 2rem;
+  margin-bottom: 3rem;
 }
 .niche-item {
   display: flex;
-  gap: 1.25rem;
+  gap: 1.5rem;
   align-items: flex-start;
 }
 .niche-icon {
-  font-size: 2rem;
   background: rgba(194, 144, 44, 0.08);
   border: 1px solid rgba(194, 144, 44, 0.2);
-  padding: 0.6rem;
+  padding: 0.75rem;
   border-radius: 6px;
-  line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+  color: var(--color-gold);
+}
+.niche-svg {
+  width: 24px;
+  height: 24px;
+  display: block;
 }
 .niche-item h4 {
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   color: var(--text-white);
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.4rem;
 }
 .niche-item p {
-  font-size: 0.95rem;
+  font-size: 0.98rem;
   color: var(--text-muted);
-  line-height: 1.5;
+  line-height: 1.6;
 }
 .journey-transition {
   font-size: 1.05rem;
   color: var(--text-muted);
-  line-height: 1.65;
+  line-height: 1.7;
   border-left: 3px solid var(--color-gold);
   padding-left: 1.5rem;
 }
